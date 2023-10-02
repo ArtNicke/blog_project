@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import{dataFake} from '../../Data/dataFake'
 
 @Component({
   selector: 'app-content',
@@ -8,9 +9,10 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ContentComponent implements OnInit {
 
-  photoCover:string="https://cinepop.com.br/wp-content/uploads/2019/11/tony-stark-696x391.jpg"
-  contentTitle:string="Tony Stark Descobre Novo Potencial nas Joias do Infinito"
-  contentDescription:string="Tony Stark, o lendário Homem de Ferro e gênio inventor, surpreendeu o mundo mais uma vez ao anunciar uma descoberta revolucionária relacionada às poderosas Joias do Infinito. Stark, conhecido por sua dedicação à tecnologia e inovação, revelou que desenvolveu uma tecnologia capaz de canalizar a energia das Joias do Infinito de forma segura e controlada."
+  photoCover:string=""
+  contentTitle:string=""
+  contentDescription:string=""
+  private Id:string | null = "0"
 
   constructor(
     private route:ActivatedRoute
@@ -18,9 +20,17 @@ export class ContentComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe( value =>
-      console.log(value.get("Id"))
-
+    this.Id = value.get("Id")
     )
+
+    this.setValuesToComponent(this.Id)
   }
 
+  setValuesToComponent(Id:string | null){
+    const result = dataFake.filter(article => article.id == Id) [0]
+
+    this.contentTitle = result.title
+    this.contentDescription = result.description
+    this.photoCover = result.photoCover
+  }
 }
